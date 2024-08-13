@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1 className="text-3xl font-bold text-blue-500 text-center mt-10">"HelloWorld"(노수안);</h1>
+        <h1 className="text-3xl font-bold text-blue-500 text-center mt-10">"HelloWorld"(print);</h1>
       </header>
     </div>
   );

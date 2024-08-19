@@ -1,23 +1,80 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+models
+node_modules
+# Node modules (React 프로젝트)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/package-lock.json
+/yarn.lock
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.DS_Store
+# 환경 설정 파일
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Build 디렉토리 (React 빌드 파일)
+build/
+dist/
+
+# Coverage 디렉토리
+coverage/
+
+# Python 가상 환경
+venv/
+.env/
+.venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# VSCode 설정 파일
+.vscode/
+
+# macOS 시스템 파일
+.DS_Store
+
+# 파이썬 관련 파일
+*.py[cod]
+*.so
+*.sqlite3
+*.pot
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Flask 관련
+instance/
+.webassets-cache

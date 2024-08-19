@@ -4,18 +4,19 @@ import './index.css';
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [predictionResult, setPredictionResult] = useState(null);
-  const [evaluationResult, setEvaluationResult] = useState(null);  // 전체 평가 결과를 위한 상태 추가
+  const [evaluationResult, setEvaluationResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState("");
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+    const file = e.target.files[0];
+    setSelectedFile(file);
   };
 
   const handlePrediction = async () => {
     if (!selectedFile) {
-      alert('파일을 선택하세요!');
+      alert('파일을 선택해주세요');
       return;
     }
 
@@ -27,7 +28,7 @@ function App() {
     formData.append('file', selectedFile);
 
     try {
-      const response = await fetch('http://localhost:5000/predict', {  // Flask 서버로 요청을 보냅니다.
+      const response = await fetch('http://localhost:5000/predict', {
         method: 'POST',
         body: formData,
       });
@@ -72,43 +73,72 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className="text-3xl font-bold text-blue-500 text-center mt-10">감정 예측</h1>
-      <input
-        type="file"
-        onChange={handleFileChange}
-        className="block mx-auto my-4"
-      />
-      <button
-        onClick={handlePrediction}
-        className="bg-blue-500 text-white font-bold py-2 px-4 rounded block mx-auto"
-      >
-        값 1개 랜덤 예측
-      </button>
-      <button
-        onClick={handleEvaluation}
-        className="bg-green-500 text-white font-bold py-2 px-4 rounded block mx-auto mt-4"
-      >
-        전체 데이터셋 평가
-      </button>
-      {loading && <p className="text-center mt-4">{progress}</p>}
-      {error && <p className="text-center mt-4 text-red-500">{error}</p>}
-      {predictionResult && (
-        <div className="text-center mt-10">
-          <p className="text-xl">예측된 감정: {predictionResult.prediction}</p>
-          <p className="text-xl">실제 감정: {predictionResult.actual}</p>
-          <p className="text-xl">{predictionResult.correct}</p>
+      {/* 네비게이션 바 */}
+      <nav className="bg-sagee pt-3 pb-4 pl-5 text-beigee font-bold font-sans text-3xl">
+        Heart Forest
+      </nav>
+
+      {/* 메인 콘텐츠 */}
+      <div className='bg-beigee min-h-screen'>
+        <h1 className="font-bold text-green-800 pl-14 pt-14 pb-5 text-6xl leading-snug ">뇌파에 따른 감정 분석하기.</h1>
+        
+        {/* 파일 선택과 선택된 파일명을 한 줄에 배치 */}
+        <div className="flex items-center ml-14 mt-5">
+          {/* 커스터마이징된 파일 업로드 버튼 */}
+          <label className="text-lg cursor-pointer flex items-center text-beigee bg-sagee">
+            <span className="py-3 pl-4 my-2 text-beigee font-bold">
+              뇌파 파일 선택( .csv )  
+            </span>
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            <p className="ml-4 text-lg text-beigee font-bold pr-4">
+              {selectedFile ? `선택된 파일: ${selectedFile.name}` : "선택된 파일 없음"}
+            </p>
+          </label>
         </div>
-      )}
-      {evaluationResult && (
-        <div className="text-center mt-10">
-          <h2 className="text-2xl font-bold">전체 데이터셋 평가 결과</h2>
-          {evaluationResult.map((item, index) => (
-            <div key={index} className="mt-2">
-              <p>사용자 {item.index}: 예측된 감정: {item.predicted} - 실제 감정: {item.actual} ({item.correct})</p>
-            </div>
-          ))}
+
+        {/* 버튼들 */}
+        <div className="flex ml-14 mt-4 space-x-4">
+          <button
+            onClick={handlePrediction}
+            className="text-lg cursor-pointer flex items-center text-beigee bg-sagee px-4 py-4 font-bold hover:bg-green-700"
+          >
+            값 1개 랜덤 예측
+          </button>
+          <button
+            onClick={handleEvaluation}
+            className="text-lg cursor-pointer flex items-center text-beigee bg-sagee px-4 py-4 font-bold hover:bg-green-700"
+          >
+            전체 데이터셋 평가
+          </button>
         </div>
-      )}
+
+        {loading && <p className=" mt-4 text-xl">{progress}</p>}
+        {error && <p className=" mt-4 text-red-500 text-xl">{error}</p>}
+        {predictionResult && (
+          <div className=" text-center mt-10">
+            <p className=" text-8xl mb-8">{predictionResult.emoji}</p>
+            <p className=" text-2xl font-bold">{predictionResult.correct} !</p>
+            <p className=" text-2xl">사용자 {predictionResult.index}:</p>
+            <p className=" text-2xl">예측된 감정: {predictionResult.prediction}</p>
+            <p className=" text-2xl">실제 감정: {predictionResult.actual}</p>
+            
+          </div>
+        )}
+        {evaluationResult && (
+          <div className="text-center mt-10 border-t border-dashed ">
+            <h2 className="text-2xl font-bold mt-8">전체 데이터셋 평가 결과</h2>
+            {evaluationResult.map((item, index) => (
+              <div key={index} className="mt-4 text-xl">
+                <p>사용자 {item.index}: 예측된 감정: {item.predicted} - 실제 감정: {item.actual} ({item.correct})</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

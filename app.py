@@ -23,7 +23,7 @@ except Exception as e:
 
 @app.route('/')
 def home():
-    return "Flask 서버가 실행 중입니다."
+    return "Flask server is running."
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -43,10 +43,13 @@ def predict():
         # 예측 결과 해석 및 한국어 번역
         if predicted_class[0] == 0:
             result = "부정적"
+            emoji = "😢"
         elif predicted_class[0] == 1:
             result = "중립적"
+            emoji = "😐"
         else:
             result = "긍정적"
+            emoji = "😊"
 
         # 실제 감정 번역
         actual_label = selected_row['label']
@@ -58,13 +61,14 @@ def predict():
             actual_result = "긍정적"
 
         # 예측이 올바른지 확인
-        is_correct = (result == actual_result)
-        correct_message = "올바른 예측" if is_correct else "잘못된 예측"
+        correct_message = "올바른 예측" if result == actual_result else "잘못된 예측"
 
         return jsonify({
+            'index': random_index,
             'prediction': result,
             'actual': actual_result,
-            'correct': correct_message
+            'correct': correct_message,
+            'emoji': emoji
         })
 
     except Exception as e:
